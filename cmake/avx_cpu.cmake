@@ -1,0 +1,48 @@
+# Linux x86_64 CPU profile: AVX is required; AVX2/FMA are not required.
+# Load with: cmake -C cmake/avx_cpu.cmake -S . -B <BUILD_DIR>
+
+set(CMAKE_BUILD_TYPE "Release" CACHE STRING "AVX CPU build profile" FORCE)
+set(PY_VERSION "3.12" CACHE STRING "AVX CPU build profile" FORCE)
+set(WITH_GPU "OFF" CACHE BOOL "AVX CPU build profile" FORCE)
+set(WITH_ROCM "OFF" CACHE BOOL "AVX CPU build profile" FORCE)
+set(WITH_MKL "OFF" CACHE BOOL "AVX CPU build profile" FORCE)
+set(WITH_ONEMKL "OFF" CACHE BOOL "AVX CPU build profile" FORCE)
+set(WITH_ONEDNN "OFF" CACHE BOOL "AVX CPU build profile" FORCE)
+set(WITH_OPENVINO "OFF" CACHE BOOL "AVX CPU build profile" FORCE)
+set(WITH_CINN "OFF" CACHE BOOL "AVX CPU build profile" FORCE)
+set(WITH_XBYAK "OFF" CACHE BOOL "AVX CPU build profile" FORCE)
+set(WITH_SLEEF "OFF" CACHE BOOL "AVX CPU build profile" FORCE)
+set(WITH_POCKETFFT "ON" CACHE BOOL "AVX CPU build profile" FORCE)
+set(WITH_CRYPTO "OFF" CACHE BOOL "AVX CPU build profile" FORCE)
+set(WITH_TESTING "OFF" CACHE BOOL "AVX CPU build profile" FORCE)
+set(WITH_CPP_TEST "OFF" CACHE BOOL "AVX CPU build profile" FORCE)
+set(WITH_INFERENCE_API_TEST "OFF" CACHE BOOL "AVX CPU build profile" FORCE)
+set(WITH_DISTRIBUTE "OFF" CACHE BOOL "AVX CPU build profile" FORCE)
+set(WITH_NCCL "OFF" CACHE BOOL "AVX CPU build profile" FORCE)
+set(WITH_RCCL "OFF" CACHE BOOL "AVX CPU build profile" FORCE)
+set(WITH_FLAGCX "OFF" CACHE BOOL "AVX CPU build profile" FORCE)
+set(WITH_AVX "ON" CACHE BOOL "AVX CPU build profile" FORCE)
+set(AVX_FOUND "ON" CACHE BOOL "AVX CPU build profile" FORCE)
+set(AVX2_FOUND "OFF" CACHE BOOL "AVX CPU build profile" FORCE)
+set(AVX512F_FOUND "OFF" CACHE BOOL "AVX CPU build profile" FORCE)
+set(WITH_PYTHON "ON" CACHE BOOL "AVX CPU build profile" FORCE)
+set(ON_INFER "ON" CACHE BOOL "AVX CPU build profile" FORCE)
+set(WITH_UNITY_BUILD "OFF" CACHE BOOL "AVX CPU build profile" FORCE)
+set(BUILD_WHL_PACKAGE "ON" CACHE BOOL "AVX CPU build profile" FORCE)
+set(CMAKE_EXPORT_COMPILE_COMMANDS "ON" CACHE BOOL "AVX CPU build profile" FORCE)
+set(PADDLE_AVX_CPU "ON" CACHE BOOL "AVX CPU build profile" FORCE)
+
+get_filename_component(_avx_source "${CMAKE_CURRENT_LIST_DIR}/.." ABSOLUTE)
+set(_avx_flags "-march=x86-64 -mtune=generic -mavx -mno-avx2 -mno-fma -mno-fma4 -mno-avx512f")
+string(APPEND _avx_flags
+       " -ffile-prefix-map=${_avx_source}=/paddle-avx/source"
+       " -fdebug-prefix-map=${_avx_source}=/paddle-avx/source")
+if(CMAKE_BINARY_DIR AND NOT CMAKE_BINARY_DIR STREQUAL _avx_source)
+  string(APPEND _avx_flags
+         " -ffile-prefix-map=${CMAKE_BINARY_DIR}=/paddle-avx/build"
+         " -fdebug-prefix-map=${CMAKE_BINARY_DIR}=/paddle-avx/build")
+endif()
+set(CMAKE_C_FLAGS "${_avx_flags}" CACHE STRING "AVX CPU baseline" FORCE)
+set(CMAKE_CXX_FLAGS "${_avx_flags}" CACHE STRING "AVX CPU baseline" FORCE)
+unset(_avx_flags)
+unset(_avx_source)
